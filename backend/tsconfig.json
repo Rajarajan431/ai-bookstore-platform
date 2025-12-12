@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    /* Node.js Backend Environment */
+    "target": "ES2020",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "lib": ["ES2020"],
+    
+    /* Directory Structure */
+    "rootDir": "src",
+    "outDir": "dist",
+
+    /* Types */
+    "types": ["node"],
+
+    /* Emit */
+    "sourceMap": true,
+    "declaration": false,
+    "declarationMap": false,
+
+    /* Strict Type Safety */
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}
