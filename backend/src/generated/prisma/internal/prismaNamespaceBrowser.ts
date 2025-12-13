@@ -79,8 +79,7 @@ export const UserScalarFieldEnum = {
   email: 'email',
   password: 'password',
   role: 'role',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  createdAt: 'createdAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -104,11 +103,12 @@ export type BookScalarFieldEnum = (typeof BookScalarFieldEnum)[keyof typeof Book
 
 export const OrderScalarFieldEnum = {
   id: 'id',
-  userId: 'userId',
+  buyerId: 'buyerId',
   total: 'total',
   status: 'status',
   paymentId: 'paymentId',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
@@ -118,8 +118,11 @@ export const OrderItemScalarFieldEnum = {
   id: 'id',
   orderId: 'orderId',
   bookId: 'bookId',
+  sellerId: 'sellerId',
   quantity: 'quantity',
-  price: 'price'
+  price: 'price',
+  status: 'status',
+  createdAt: 'createdAt'
 } as const
 
 export type OrderItemScalarFieldEnum = (typeof OrderItemScalarFieldEnum)[keyof typeof OrderItemScalarFieldEnum]

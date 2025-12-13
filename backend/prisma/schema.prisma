@@ -14,21 +14,24 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String
-  email     String    @unique
+  email     String   @unique
   password  String
-  role      String    @default("user")
+  role      String   @default("USER")
 
-  // Books this user has created (seller)
-  books     Book[]    @relation("UserBooks")
+  // Books user created (seller)
+  books     Book[]   @relation("UserBooks")
 
-  // Orders the user has placed (customer)
-  orders    Order[]
+  // Orders user placed (buyer)
+  orders    Order[]  @relation("BuyerOrders")
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  // Orders user received (seller)
+  sales     OrderItem[] @relation("SellerOrders")
+
+  createdAt DateTime @default(now())
 }
+
 
 model Book {
   id          Int          @id @default(autoincrement())
@@ -52,26 +55,51 @@ model Book {
 
 model Order {
   id         Int         @id @default(autoincrement())
-  userId     Int
-  user       User        @relation(fields: [userId], references: [id])
+
+  // Buyer
+  buyerId    Int
+  buyer      User        @relation("BuyerOrders", fields: [buyerId], references: [id])
 
   total      Float
-  status     String       @default("pending") // pending, paid, shipped, completed
-  paymentId  String?      // Stripe payment ID
+  status     OrderStatus @default(PENDING)
+  paymentId  String?
 
   items      OrderItem[]
-  createdAt  DateTime     @default(now())
+
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
 }
 
 model OrderItem {
-  id        Int        @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
 
   orderId   Int
-  order     Order      @relation(fields: [orderId], references: [id])
+  order     Order   @relation(fields: [orderId], references: [id])
 
   bookId    Int
-  book      Book       @relation(fields: [bookId], references: [id])
+  book      Book    @relation(fields: [bookId], references: [id])
 
-  quantity  Int         @default(1)
-  price     Float       // capture book price at time of purchase
+  // Seller (book owner at purchase time)
+  sellerId  Int
+  seller    User    @relation("SellerOrders", fields: [sellerId], references: [id])
+
+  quantity  Int      @default(1)
+  price     Float    // snapshot price
+
+  status    OrderItemStatus @default(PENDING)
+
+  createdAt DateTime @default(now())
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  COMPLETED
+  CANCELLED
+}
+
+enum OrderItemStatus {
+  PENDING
+  SHIPPED
 }
