@@ -24,6 +24,9 @@
     "skipLibCheck": true,
     "resolveJsonModule": true
   },
-  "include": ["src"],
+  "include": [
+    "src/**/*.ts",
+    "src/types/express.ts"
+  ],
   "exclude": ["node_modules", "dist"]
 }

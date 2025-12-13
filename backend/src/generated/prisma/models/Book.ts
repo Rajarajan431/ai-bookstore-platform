@@ -224,7 +224,7 @@ export type BookGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type BookGroupByOutputType = {
   id: number
   title: string
-  author: string
+  author: string | null
   description: string | null
   price: number
   stock: number
@@ -260,7 +260,7 @@ export type BookWhereInput = {
   NOT?: Prisma.BookWhereInput | Prisma.BookWhereInput[]
   id?: Prisma.IntFilter<"Book"> | number
   title?: Prisma.StringFilter<"Book"> | string
-  author?: Prisma.StringFilter<"Book"> | string
+  author?: Prisma.StringNullableFilter<"Book"> | string | null
   description?: Prisma.StringNullableFilter<"Book"> | string | null
   price?: Prisma.FloatFilter<"Book"> | number
   stock?: Prisma.IntFilter<"Book"> | number
@@ -275,7 +275,7 @@ export type BookWhereInput = {
 export type BookOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  author?: Prisma.SortOrder
+  author?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   price?: Prisma.SortOrder
   stock?: Prisma.SortOrder
@@ -293,7 +293,7 @@ export type BookWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.BookWhereInput[]
   NOT?: Prisma.BookWhereInput | Prisma.BookWhereInput[]
   title?: Prisma.StringFilter<"Book"> | string
-  author?: Prisma.StringFilter<"Book"> | string
+  author?: Prisma.StringNullableFilter<"Book"> | string | null
   description?: Prisma.StringNullableFilter<"Book"> | string | null
   price?: Prisma.FloatFilter<"Book"> | number
   stock?: Prisma.IntFilter<"Book"> | number
@@ -308,7 +308,7 @@ export type BookWhereUniqueInput = Prisma.AtLeast<{
 export type BookOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  author?: Prisma.SortOrder
+  author?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   price?: Prisma.SortOrder
   stock?: Prisma.SortOrder
@@ -329,7 +329,7 @@ export type BookScalarWhereWithAggregatesInput = {
   NOT?: Prisma.BookScalarWhereWithAggregatesInput | Prisma.BookScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Book"> | number
   title?: Prisma.StringWithAggregatesFilter<"Book"> | string
-  author?: Prisma.StringWithAggregatesFilter<"Book"> | string
+  author?: Prisma.StringNullableWithAggregatesFilter<"Book"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"Book"> | string | null
   price?: Prisma.FloatWithAggregatesFilter<"Book"> | number
   stock?: Prisma.IntWithAggregatesFilter<"Book"> | number
@@ -341,7 +341,7 @@ export type BookScalarWhereWithAggregatesInput = {
 
 export type BookCreateInput = {
   title: string
-  author: string
+  author?: string | null
   description?: string | null
   price: number
   stock?: number
@@ -355,7 +355,7 @@ export type BookCreateInput = {
 export type BookUncheckedCreateInput = {
   id?: number
   title: string
-  author: string
+  author?: string | null
   description?: string | null
   price: number
   stock?: number
@@ -368,7 +368,7 @@ export type BookUncheckedCreateInput = {
 
 export type BookUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  author?: Prisma.StringFieldUpdateOperationsInput | string
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
@@ -382,7 +382,7 @@ export type BookUpdateInput = {
 export type BookUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  author?: Prisma.StringFieldUpdateOperationsInput | string
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
@@ -396,7 +396,7 @@ export type BookUncheckedUpdateInput = {
 export type BookCreateManyInput = {
   id?: number
   title: string
-  author: string
+  author?: string | null
   description?: string | null
   price: number
   stock?: number
@@ -408,7 +408,7 @@ export type BookCreateManyInput = {
 
 export type BookUpdateManyMutationInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  author?: Prisma.StringFieldUpdateOperationsInput | string
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
@@ -420,7 +420,7 @@ export type BookUpdateManyMutationInput = {
 export type BookUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  author?: Prisma.StringFieldUpdateOperationsInput | string
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
@@ -568,7 +568,7 @@ export type BookUpdateOneRequiredWithoutOrderItemsNestedInput = {
 
 export type BookCreateWithoutSellerInput = {
   title: string
-  author: string
+  author?: string | null
   description?: string | null
   price: number
   stock?: number
@@ -581,7 +581,7 @@ export type BookCreateWithoutSellerInput = {
 export type BookUncheckedCreateWithoutSellerInput = {
   id?: number
   title: string
-  author: string
+  author?: string | null
   description?: string | null
   price: number
   stock?: number
@@ -623,7 +623,7 @@ export type BookScalarWhereInput = {
   NOT?: Prisma.BookScalarWhereInput | Prisma.BookScalarWhereInput[]
   id?: Prisma.IntFilter<"Book"> | number
   title?: Prisma.StringFilter<"Book"> | string
-  author?: Prisma.StringFilter<"Book"> | string
+  author?: Prisma.StringNullableFilter<"Book"> | string | null
   description?: Prisma.StringNullableFilter<"Book"> | string | null
   price?: Prisma.FloatFilter<"Book"> | number
   stock?: Prisma.IntFilter<"Book"> | number
@@ -635,7 +635,7 @@ export type BookScalarWhereInput = {
 
 export type BookCreateWithoutOrderItemsInput = {
   title: string
-  author: string
+  author?: string | null
   description?: string | null
   price: number
   stock?: number
@@ -648,7 +648,7 @@ export type BookCreateWithoutOrderItemsInput = {
 export type BookUncheckedCreateWithoutOrderItemsInput = {
   id?: number
   title: string
-  author: string
+  author?: string | null
   description?: string | null
   price: number
   stock?: number
@@ -676,7 +676,7 @@ export type BookUpdateToOneWithWhereWithoutOrderItemsInput = {
 
 export type BookUpdateWithoutOrderItemsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  author?: Prisma.StringFieldUpdateOperationsInput | string
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
@@ -689,7 +689,7 @@ export type BookUpdateWithoutOrderItemsInput = {
 export type BookUncheckedUpdateWithoutOrderItemsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  author?: Prisma.StringFieldUpdateOperationsInput | string
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
@@ -702,7 +702,7 @@ export type BookUncheckedUpdateWithoutOrderItemsInput = {
 export type BookCreateManySellerInput = {
   id?: number
   title: string
-  author: string
+  author?: string | null
   description?: string | null
   price: number
   stock?: number
@@ -713,7 +713,7 @@ export type BookCreateManySellerInput = {
 
 export type BookUpdateWithoutSellerInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  author?: Prisma.StringFieldUpdateOperationsInput | string
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
@@ -726,7 +726,7 @@ export type BookUpdateWithoutSellerInput = {
 export type BookUncheckedUpdateWithoutSellerInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  author?: Prisma.StringFieldUpdateOperationsInput | string
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
@@ -739,7 +739,7 @@ export type BookUncheckedUpdateWithoutSellerInput = {
 export type BookUncheckedUpdateManyWithoutSellerInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  author?: Prisma.StringFieldUpdateOperationsInput | string
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   stock?: Prisma.IntFieldUpdateOperationsInput | number
@@ -858,7 +858,7 @@ export type $BookPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     title: string
-    author: string
+    author: string | null
     description: string | null
     price: number
     stock: number

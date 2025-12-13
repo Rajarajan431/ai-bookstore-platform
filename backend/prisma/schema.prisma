@@ -33,7 +33,7 @@ model User {
 model Book {
   id          Int          @id @default(autoincrement())
   title       String
-  author      String
+  author      String?
   description String?
   price       Float
   stock       Int           @default(1)
