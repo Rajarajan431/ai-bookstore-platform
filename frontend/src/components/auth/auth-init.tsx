@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useAppDispatch } from "@/store/hooks";
-import { rehydrate, logout } from "@/store/slices/auth.slice";
+import { loadFromStorage, logout } from "@/store/slices/auth.slice";
 import { getMeApi } from "@/lib/auth.api";
 
 export function AuthInit() {
@@ -13,14 +13,13 @@ export function AuthInit() {
     if (!token) return;
 
     getMeApi()
-      .then((user) => {
-        dispatch(rehydrate({ user, token }));
+      .then(() => {
+        dispatch(loadFromStorage());
       })
       .catch(() => {
-        localStorage.removeItem("token");
         dispatch(logout());
       });
-  }, []);
+  }, [dispatch]);
 
   return null;
 }

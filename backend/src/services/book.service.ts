@@ -7,7 +7,7 @@ export const createBook = async (
 ) => {
     return prisma.book.create({
         data: {
-            ...data,
+            ...data,       
             sellerId: userId,
         },
     });
@@ -26,9 +26,19 @@ export const getAllbooks = async () => {
 export const getBookById = async (id: number) => {
   return prisma.book.findUnique({
     where: { id },
-    include: {
+    select: {
+      id: true,
+      title: true,
+      author: true,
+      description: true,
+      price: true,
+      imageUrl: true,
+      stock: true,
       seller: {
-        select: { id: true, name: true },
+        select: {
+          id: true,
+          name: true,
+        },
       },
     },
   });

@@ -98,3 +98,27 @@ export async function getSellerOrders(sellerId: number) {
     }
   });
 }
+
+export async function getCart(buyerId: number) {
+  return prisma.order.findFirst({
+    where: {
+      buyerId,
+      status: "PENDING",
+    },
+    include: {
+      items: {
+        include: {
+          book: {
+            select: {
+              id: true,
+              title: true,
+              imageUrl: true,
+              price: true,
+            },
+          },
+        },
+      },
+    },
+  });
+}
+

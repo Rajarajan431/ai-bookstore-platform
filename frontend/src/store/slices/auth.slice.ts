@@ -4,7 +4,6 @@ interface User {
   id: number;
   name: string;
   email: string;
-  role: string;
 }
 
 interface AuthState {
@@ -23,23 +22,39 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    loginSuccess(state, action: PayloadAction<{ user: User; token: string }>) {
+    loginSuccess(
+      state,
+      action: PayloadAction<{ user: User; token: string }>
+    ) {
       state.user = action.payload.user;
       state.token = action.payload.token;
       state.isAuthenticated = true;
+
+      localStorage.setItem("token", action.payload.token);
+      localStorage.setItem("user", JSON.stringify(action.payload.user));
     },
+
+    loadFromStorage(state) {
+      const token = localStorage.getItem("token");
+      const user = localStorage.getItem("user");
+
+      if (!token || !user) return;
+
+      state.token = token;
+      state.user = JSON.parse(user);
+      state.isAuthenticated = true;
+    },
+
     logout(state) {
       state.user = null;
       state.token = null;
       state.isAuthenticated = false;
-    },
-    rehydrate(state, action) {
-      state.user = action.payload.user;
-      state.token = action.payload.token;
-      state.isAuthenticated = true;
-    },
+
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+    }
   },
 });
 
-export const { loginSuccess, logout, rehydrate } = authSlice.actions;
+export const { loginSuccess, logout, loadFromStorage } = authSlice.actions;
 export default authSlice.reducer;

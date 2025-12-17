@@ -29,7 +29,7 @@ export default function LoginForm() {
       const res = await loginApi(data);
       dispatch(loginSuccess(res));
       localStorage.setItem("token", res.token);
-      router.push("/dashboard");
+      router.push("/");
     } catch (err: any) {
       setError("Invalid email or password");
     }

@@ -28,7 +28,7 @@ export function RegisterForm() {
       localStorage.setItem("token", res.token);
       dispatch(loginSuccess(res));
 
-      router.push("/dashboard");
+      router.push("/");
     } catch (err: any) {
       alert(err.message || "Registration failed");
     }

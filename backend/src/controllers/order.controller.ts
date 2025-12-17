@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { createOrderSchema } from "../validators/order.schema";
-import { createOrder, getBuyerOrders, getSellerOrders } from "../services/order.service";
+import { createOrder, getBuyerOrders, getCart, getSellerOrders } from "../services/order.service";
 
 export async function createOrderHandler(req: Request, res: Response) {
   try {
@@ -39,3 +39,10 @@ export async function getSellerOrdersHandler(req: Request, res: Response) {
     res.status(500).json({ message: "Failed to fetch seller orders" });
   }
 }
+
+export async function getCartHandler(req: Request, res: Response) {
+  const buyerId = req.user!.id;
+  const cart = await getCart(buyerId);
+  res.json(cart);
+}
+
