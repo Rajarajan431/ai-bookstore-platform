@@ -1,55 +1,76 @@
 "use client";
 
 import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { fetchCart } from "@/store/slices/cart.slice";
+import { useRouter } from "next/navigation";
+import { ShoppingCart, X } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { X, Plus, Minus, ShoppingCart } from "lucide-react";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { fetchCart, removeFromCart, clearCart } from "@/store/slices/cart.slice";
+import { placeOrder } from "@/store/slices/order.slice";
 
 export default function CartClient() {
   const dispatch = useAppDispatch();
+  const router = useRouter();
+
   const { cart, loading } = useAppSelector((state) => state.cart);
 
   useEffect(() => {
     dispatch(fetchCart());
   }, [dispatch]);
 
-  if (loading) return <p>Loading cart...</p>;
-  if (!cart || cart.items.length === 0) return <p>Your cart is empty</p>;
+  const handleCheckout = async () => {
+    if (!cart || cart.items.length === 0) return;
 
-  
+    try {
+      const items = cart.items.map((item) => ({
+        bookId: item.book.id,
+        quantity: item.quantity,
+      }));
+
+      await dispatch(placeOrder(items)).unwrap();
+
+      dispatch(clearCart());
+      alert("Order placed successfully 🎉");
+      router.push("/dashboard/orders");
+    } catch {
+      alert("Failed to place order");
+    }
+  };
+
+  if (loading) return <p className="text-center">Loading cart...</p>;
+  if (!cart || cart.items.length === 0)
+    return <p className="text-center">Your cart is empty</p>;
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white rounded-xl shadow-md">
+    <div className="max-w-3xl mx-auto p-6 bg-white rounded-xl shadow">
       <div className="flex items-center gap-2 mb-6">
-        <ShoppingCart className="w-6 h-6 text-primary-700" />
-        <h1 className="text-2xl font-bold text-gray-800">Your Cart</h1>
+        <ShoppingCart className="w-6 h-6" />
+        <h1 className="text-2xl font-bold">Your Cart</h1>
       </div>
 
-      <ScrollArea className="max-h-100px">
+      <ScrollArea className="max-h-100">
         <div className="space-y-4">
           {cart.items.map((item) => (
             <div
               key={item.id}
-              className="flex items-center justify-between p-4 border rounded-lg shadow-sm hover:shadow-md transition"
+              className="flex justify-between items-center border rounded-lg p-4"
             >
               <div>
-                <p className="font-semibold text-gray-900">{item.book.title}</p>
-                <div className="flex items-center gap-3 mt-1 text-gray-600">
-                  <span>Qty: {item.quantity}</span>
-                  <div className="flex items-center gap-1">
-                    <button className="p-1 rounded hover:bg-gray-100">
-                      <Minus className="w-4 h-4 text-gray-700" />
-                    </button>
-                    <button className="p-1 rounded hover:bg-gray-100">
-                      <Plus className="w-4 h-4 text-gray-700" />
-                    </button>
-                  </div>
-                </div>
-                <p className="mt-1 text-gray-800 font-medium">₹ {item.price}</p>
+                <p className="font-semibold">{item.book.title}</p>
+                <p className="text-sm text-gray-600">
+                  Qty: {item.quantity}
+                </p>
+                <p className="font-medium mt-1">
+                  ₹ {item.price * item.quantity}
+                </p>
               </div>
-              <button className="p-2 rounded hover:bg-red-100">
+
+              <button
+                onClick={() => dispatch(removeFromCart(item.id))}
+                className="p-2 rounded hover:bg-red-100"
+              >
                 <X className="w-5 h-5 text-red-600" />
               </button>
             </div>
@@ -57,17 +78,16 @@ export default function CartClient() {
         </div>
       </ScrollArea>
 
-      <div className="mt-6 flex justify-between items-center border-t pt-4 font-bold text-gray-900 text-lg">
-        <span>Total:</span>
+      <div className="flex justify-between mt-6 border-t pt-4 text-lg font-bold">
+        <span>Total</span>
         <span>₹ {cart.total}</span>
       </div>
 
       <Button
-        className="mt-6 border-2 w-full cursor-pointer
-        flex items-center justify-center gap-2"
+        className="w-full mt-6"
         size="lg"
+        onClick={handleCheckout}
       >
-        <ShoppingCart className="w-5 h-5 text-white" />
         Checkout
       </Button>
     </div>

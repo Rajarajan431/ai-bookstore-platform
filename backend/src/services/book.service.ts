@@ -56,10 +56,15 @@ export const updateBook = async (
   if (!book) throw new Error("Book not found");
   if (book.sellerId !== userId)
     throw new Error("Unauthorized");
+  const cleanData = Object.fromEntries(
+    Object.entries(data).filter(
+      ([_, value]) => value !== undefined
+    )
+  );
 
   return prisma.book.update({
     where: { id: bookId },
-    data,
+    data: cleanData,
   });
 };
 

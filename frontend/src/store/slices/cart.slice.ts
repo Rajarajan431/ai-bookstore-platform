@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { CartState, Cart } from "@/types/cart";
 import * as cartApi from "@/lib/cart.api";
 
+
 const initialState: CartState = {
   cart: null,
   loading: false,
@@ -31,7 +32,11 @@ export const removeFromCart = createAsyncThunk<Cart, number>(
 const cartSlice = createSlice({
   name: "cart",
   initialState,
-  reducers: {},
+  reducers: {
+    clearCart(state) {
+      state.cart = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchCart.pending, (state) => {
@@ -49,5 +54,7 @@ const cartSlice = createSlice({
       });
   },
 });
+
+export const { clearCart } = cartSlice.actions;
 
 export default cartSlice.reducer;

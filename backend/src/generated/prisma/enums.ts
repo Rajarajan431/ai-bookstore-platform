@@ -22,7 +22,9 @@ export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
 
 export const OrderItemStatus = {
   PENDING: 'PENDING',
-  SHIPPED: 'SHIPPED'
+  SHIPPED: 'SHIPPED',
+  DELIVERED: 'DELIVERED',
+  CANCELLED: 'CANCELLED'
 } as const
 
 export type OrderItemStatus = (typeof OrderItemStatus)[keyof typeof OrderItemStatus]

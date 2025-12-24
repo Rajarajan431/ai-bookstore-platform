@@ -9,7 +9,9 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
-    if (!isAuth) router.push("/login");
+    if (!isAuth) {
+      router.push("/login");
+    }
   }, [isAuth]);
 
   return <>{children}</>;

@@ -122,3 +122,20 @@ export async function getCart(buyerId: number) {
   });
 }
 
+export const updateOrderItemStatus = async (
+  itemId: number,
+  sellerId: number,
+  status: "PENDING" | "SHIPPED" | "DELIVERED" | "CANCELLED"
+) => {
+  const item = await prisma.orderItem.findUnique({
+    where: { id: itemId },
+  });
+
+  if (!item) throw new Error("Order item not found");
+  if (item.sellerId !== sellerId) throw new Error("Unauthorized");
+
+  return prisma.orderItem.update({
+    where: { id: itemId },
+    data: { status },
+  });
+};

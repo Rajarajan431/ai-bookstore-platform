@@ -1,10 +1,10 @@
+import DashboardClient from "./dashboard-client";
 
 export default function DashboardPage() {
+  
   return (
-    <div className="">
-      <h1 className="text-2xl">
-        Dashboard Overview
-      </h1>
+    <div className="space-y-6">
+        <DashboardClient />
     </div>
   );
 }

@@ -102,4 +102,6 @@ enum OrderStatus {
 enum OrderItemStatus {
   PENDING
   SHIPPED
+  DELIVERED
+  CANCELLED
 }

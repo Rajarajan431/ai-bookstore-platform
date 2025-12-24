@@ -1,4 +1,3 @@
-// app/cart/page.tsx
 import CartClient from "@/components/cart/CartClient";
 
 export default function CartPage() {

@@ -1,8 +1,16 @@
+"use client";
+
+import { useAppSelector } from "@/store/hooks";
 import Link from "next/link";
+import { LogoutButton } from "../auth/logout-button";
 
 export function Sidebar() {
+
+  const user = useAppSelector((s) => s.auth.user);
+
   return (
-    <aside className="flex w-64 flex-col border-r border-slate-800 bg-slate-950 p-6">
+    <div className="">
+      <aside className="flex w-64 flex-col border-r border-slate-800 bg-slate-950 p-6">
   
         {/* Brand */}
         <h2 className="mb-8 text-2xl font-bold tracking-tight text-white">
@@ -38,8 +46,17 @@ export function Sidebar() {
           >
             Settings
           </Link>
+          
+          <Link
+            href="/dashboard/customer-orders"
+            className="rounded-lg px-3 py-2 text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white"
+          >
+            Customer Orders
+          </Link>
         </nav>
+        
     </aside>
+  </div>
 
   );
 }
