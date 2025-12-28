@@ -19,7 +19,11 @@ import {
   CreateBookInput,
 } from "@/schemas/book.schema";
 import { createBook } from "@/lib/book.api";
+import { generateBookDescription } from "@/lib/ai.api";
+
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Sparkles } from "lucide-react";
 
 export default function AddBookDialog({
   children,
@@ -27,6 +31,8 @@ export default function AddBookDialog({
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
+  const [loadingAI, setLoadingAI] = useState(false);
+  const router = useRouter();
 
   const form = useForm<CreateBookInput>({
     resolver: zodResolver(createBookSchema) as any,
@@ -45,14 +51,36 @@ export default function AddBookDialog({
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
+    getValues,
+    setValue,
   } = form;
+
+  // ✅ AI Description Generator
+  const handleGenerateDescription = async () => {
+    const { title, author } = getValues();
+
+    if (!title || !author) {
+      alert("Please enter title and author first");
+      return;
+    }
+
+    try {
+      setLoadingAI(true);
+      const res = await generateBookDescription({ title, author });
+      setValue("description", res.description);
+    } catch {
+      alert("Failed to generate description");
+    } finally {
+      setLoadingAI(false);
+    }
+  };
 
   const onSubmit = async (data: CreateBookInput) => {
     try {
       await createBook(data);
       reset();
       setOpen(false);
-      // later: router.refresh()
+      router.refresh();
     } catch (error) {
       console.error("Failed to create book", error);
     }
@@ -62,80 +90,60 @@ export default function AddBookDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
 
-      <DialogContent className="max-w-lg text-black">
+      <DialogContent className="max-w-lg">
         <DialogHeader>
-          <DialogTitle>Add a New Book</DialogTitle>
+          <DialogTitle className="text-black">Add a New Book</DialogTitle>
         </DialogHeader>
 
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="space-y-4"
-        >
-          <div>
-            <Input placeholder="Title" {...register("title")} />
-            {errors.title && (
-              <p className="text-sm text-red-500">
-                {errors.title.message}
-              </p>
-            )}
-          </div>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <Input placeholder="Title" {...register("title")} className="text-black" />
+          {errors.title && (
+            <p className="text-sm text-red-500">{errors.title.message}</p>
+          )}
 
-          <div>
-            <Input placeholder="Author" {...register("author")} />
-          </div>
+          <Input placeholder="Author" {...register("author")} className="text-black" />
 
-          <div>
-            <Textarea
-              placeholder="Description"
-              {...register("description")}
-            />
-          </div>
+          {/* ✅ AI Button */}
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleGenerateDescription}
+            disabled={loadingAI}
+            className="flex items-center gap-2 text-black"
+          >
+            <Sparkles className="w-4 h-4" />
+            {loadingAI ? "Generating..." : "Generate Description with AI"}
+          </Button>
+
+          <Textarea
+            placeholder="Description"
+            {...register("description")}
+            className="text-black"
+          />
 
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Input
-                type="number"
-                placeholder="Price"
-                {...register("price")}
-              />
-              {errors.price && (
-                <p className="text-sm text-red-500">
-                  {errors.price.message}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <Input
-                type="number"
-                placeholder="Stock"
-                {...register("stock")}
-              />
-              {errors.stock && (
-                <p className="text-sm text-red-500">
-                  {errors.stock.message}
-                </p>
-              )}
-            </div>
-          </div>
-
-          <div>
             <Input
-              placeholder="Image URL"
-              {...register("imageUrl")}
+              type="number"
+              placeholder="Price"
+              className="text-black"
+              {...register("price")}
             />
-            {errors.imageUrl && (
-              <p className="text-sm text-red-500">
-                {errors.imageUrl.message}
-              </p>
-            )}
+            <Input
+              type="number"
+              placeholder="Stock"
+              className="text-black"
+              {...register("stock")}
+            />
           </div>
 
-          <div className="flex justify-end gap-2 text-black">
+          <Input placeholder="Image URL" {...register("imageUrl")}  className="text-black"/>
+
+          <div className="flex justify-end gap-2">
             <Button
               type="button"
               variant="outline"
               onClick={() => setOpen(false)}
+              className="text-black"
             >
               Cancel
             </Button>

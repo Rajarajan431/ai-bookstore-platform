@@ -11,6 +11,7 @@ import orderRoutes from "./routes/order.routes";
 import cartRoutes from "./routes/cart.routes";
 import userRoutes from "./routes/user.routes";
 import analyticsRoutes from "./routes/analytics.routes";
+import aiRoutes from "./routes/ai.routes";
 
 const app = express();
 app.use(cors());
@@ -22,6 +23,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/analytics", analyticsRoutes);
+app.use("/api/ai", aiRoutes);
 
 
 const PORT = process.env.PORT;
