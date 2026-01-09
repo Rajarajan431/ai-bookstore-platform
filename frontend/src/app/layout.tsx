@@ -5,6 +5,7 @@ import { Providers } from "./providers";
 import { AuthInit } from "@/components/auth/auth-init";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

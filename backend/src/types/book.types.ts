@@ -4,6 +4,7 @@ export interface CreateBookInput {
     description: string;
     price: number;
     stock: number;
+    imageUrl?: string;
 }
 
 export interface UpdateBookInput {

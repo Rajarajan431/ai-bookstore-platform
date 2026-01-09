@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createBook, deleteBook, getAllbooks, getBookById, updateBook } from "../services/book.service";
+import { createBook, deleteBook, getAllBooks, getBookById, updateBook } from "../services/book.service";
 import { createBookSchema, updateBookSchema } from "../validators/book.validation";
 
 export const createBookHandler = async (req: Request, res: Response) => {
@@ -10,10 +10,19 @@ export const createBookHandler = async (req: Request, res: Response) => {
     res.status(201).json(book);
 }
 
-export const getBooksHandler = async (_req: Request, res: Response) => {
-  const books = await getAllbooks();
-  res.json(books);
+export const getBooksHandler = async (req: Request, res: Response) => {
+  try {
+    const q =
+      typeof req.query.q === "string" ? req.query.q : undefined;
+
+    const books = await getAllBooks(q);
+    res.json(books);
+  } catch (error) {
+    console.error("Get books error:", error);
+    res.status(500).json({ message: "Failed to fetch books" });
+  }
 };
+
 
 export const getBookHandler = async (req: Request, res: Response) => {
   const book = await getBookById(Number(req.params.id));

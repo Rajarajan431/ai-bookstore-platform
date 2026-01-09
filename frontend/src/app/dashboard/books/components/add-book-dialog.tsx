@@ -25,13 +25,19 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Sparkles } from "lucide-react";
 
+import { CldUploadWidget } from "next-cloudinary"
+import { uploadToCloudinary } from "@/lib/uploadToCloudinary";
+
+
 export default function AddBookDialog({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loadingAI, setLoadingAI] = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const form = useForm<CreateBookInput>({
@@ -75,22 +81,41 @@ export default function AddBookDialog({
     }
   };
 
+   const handleImageUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setLoading(true);
+      const url = await uploadToCloudinary(file);
+      setValue("imageUrl", url);
+    } catch (err) {
+      console.error(err);
+      alert("Image upload failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const onSubmit = async (data: CreateBookInput) => {
     try {
       await createBook(data);
       reset();
       setOpen(false);
       router.refresh();
-    } catch (error) {
-      console.error("Failed to create book", error);
+    } catch (err) {
+      console.error("Failed to create book", err);
     }
   };
 
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={setOpen} modal={false}>
       <DialogTrigger asChild>{children}</DialogTrigger>
 
-      <DialogContent className="max-w-lg">
+      <DialogContent className="max-w-lg" onInteractOutside={(e) => e.preventDefault()}>
         <DialogHeader>
           <DialogTitle className="text-black">Add a New Book</DialogTitle>
         </DialogHeader>
@@ -136,7 +161,28 @@ export default function AddBookDialog({
             />
           </div>
 
-          <Input placeholder="Image URL" {...register("imageUrl")}  className="text-black"/>
+           {/* Image Upload */}
+          <div className="space-y-2">
+            <span className="text-black">upload image</span>
+             <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="text-black"
+                  placeholder="Image upload"
+                />
+
+                {loading && <p>Uploading...</p>}
+
+                {imageUrl && (
+                  <img
+                    src={imageUrl}
+                    alt="Preview"
+                    className="h-40 rounded object-cover"
+                  />
+                )}
+          </div>
+
 
           <div className="flex justify-end gap-2">
             <Button

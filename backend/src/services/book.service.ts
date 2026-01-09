@@ -13,15 +13,39 @@ export const createBook = async (
     });
 };
 
-export const getAllbooks = async () => {
-    return prisma.book.findMany({
-        include: {
-            seller: {
-                select: { id:true, name: true, email: true }
+export const getAllBooks = async (q?: string) => {
+  return prisma.book.findMany({
+    where: q
+      ? {
+          OR: [
+            {
+              title: {
+                contains: q,
+                mode: "insensitive",
+              },
             },
+            {
+              author: {
+                contains: q,
+                mode: "insensitive",
+              },
+            },
+          ],
+        }
+      : undefined,
+
+    include: {
+      seller: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
         },
-    });
+      },
+    },
+  });
 };
+
 
 export const getBookById = async (id: number) => {
   return prisma.book.findUnique({

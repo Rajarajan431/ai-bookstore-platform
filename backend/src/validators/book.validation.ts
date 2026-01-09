@@ -5,7 +5,8 @@ export const createBookSchema = z.object({
     author: z.string().min(2),
     description: z.string().min(10),
     price: z.number().positive(),
-    stock: z.number().int().min(0).default(1)
+    stock: z.number().int().min(0).default(1),
+    imageUrl: z.string().url().optional(),
 });
 
 export const updateBookSchema = z.object({

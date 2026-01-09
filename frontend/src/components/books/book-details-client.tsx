@@ -34,12 +34,10 @@ export default function BookDetailsClient({ book }: { book: any }) {
     try {
       await dispatch(addToCart(book.id)).unwrap(); // unwrap to catch errors
       router.push("/cart");
-      console.log(book.id);
-      
     } catch (err) {
       console.error("Failed to add to cart", err);
     }
-};
+  };
 
 
   return (

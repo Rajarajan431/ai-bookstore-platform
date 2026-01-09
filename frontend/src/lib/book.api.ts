@@ -1,8 +1,10 @@
 import { apiFetch } from "./api";
 import { Book } from "@/types/book";
 
-export async function getBooks(): Promise<Book[]> {
-  return apiFetch<Book[]>("/books");
+export async function getBooks(search?: string): Promise<Book[]> {
+  const query = search ? `?q=${encodeURIComponent(search)}` : "";
+
+  return apiFetch<Book[]>(`/books${query}`);
 }
 
 export async function getBookById(id: number): Promise<Book> {
