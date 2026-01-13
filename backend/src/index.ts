@@ -22,14 +22,14 @@ app.use(
 }));
 app.use(express.json());
 
-app.use("/api/auth", authRoutes)
-app.use("/api/books", bookRoutes);
-app.use("/api/orders", orderRoutes);
-app.use("/api/cart", cartRoutes);
-app.use("/api/users", userRoutes);
-app.use("/api/analytics", analyticsRoutes);
-app.use("/api/ai", aiRoutes);
-app.use("/api/cloudinary", uploadRoutes)
+app.use("/auth", authRoutes)
+app.use("/books", bookRoutes);
+app.use("/orders", orderRoutes);
+app.use("/cart", cartRoutes);
+app.use("/users", userRoutes);
+app.use("/analytics", analyticsRoutes);
+app.use("/ai", aiRoutes);
+app.use("/cloudinary", uploadRoutes)
 
 
 const PORT = process.env.PORT;
