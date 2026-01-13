@@ -1,4 +1,4 @@
-
+export const dynamic = "force-dynamic";
 
 import BooksTable from "./components/books-table";
 import BooksToolbar from "./components/books.toolbar";

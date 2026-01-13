@@ -2,17 +2,24 @@
 
 import { useAppSelector } from "@/store/hooks";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const isAuth = useAppSelector((s) => s.auth.isAuthenticated);
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (!isAuth) {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted && !isAuth) {
       router.push("/login");
     }
-  }, [isAuth]);
+  }, [mounted, isAuth, router]);
+
+  if (!mounted) return null;
 
   return <>{children}</>;
 }
