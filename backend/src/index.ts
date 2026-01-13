@@ -15,11 +15,33 @@ import aiRoutes from "./routes/ai.routes";
 import uploadRoutes from "./routes/upload.route";
 
 const app = express();
+
+app.set("trust proxy", 1);
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  process.env.FRONTEND_URL,
+];
+
 app.use(
-    cors({
-        origin: process.env.FRONTEND_URL,
-        credentials: true,
-}));
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("CORS not allowed"));
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+app.options("*", cors());
+
 app.use(express.json());
 
 app.use("/auth", authRoutes)
